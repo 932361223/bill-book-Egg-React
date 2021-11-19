@@ -119,7 +119,7 @@ class UserController extends Controller {
   async editUserInfo () {
     const { ctx, app } = this;
     // 通过 token 解析，拿到 user_id
-    const { signature = '' } = ctx.request.body
+    const { signature = '', avatar = '' } = ctx.request.body
     try {
       let user_id
       const token = ctx.request.header.authorization;
@@ -129,10 +129,10 @@ class UserController extends Controller {
       user_id = decode.id
       // 通过 username 查找 userInfo 完整信息
       const userInfo = await ctx.service.user.getUserByName(decode.username)
-      // 通过 service 方法 editUserInfo 修改 signature 信息。
       const result = await ctx.service.user.editUserInfo({
         ...userInfo,
-        signature
+        signature,
+        avatar
       });
 
       ctx.body = {
@@ -141,7 +141,8 @@ class UserController extends Controller {
         data: {
           id: user_id,
           signature,
-          username: userInfo.username
+          username: userInfo.username,
+          avatar
         }
       }
     } catch (error) {

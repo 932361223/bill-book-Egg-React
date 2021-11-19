@@ -17,10 +17,13 @@ module.exports = appInfo => {
 
   // add your middleware config here
   config.middleware = [];
-
+  config.multipart = {
+    mode: 'file',
+  };
   // add your user config here
   const userConfig = {
     // myAppName: 'egg',
+    uploadDir: 'http://r2kf0e7q5.hn-bkt.clouddn.com', // 图片上传路径
   };
   config.security = {
     csrf: {
@@ -32,8 +35,8 @@ module.exports = appInfo => {
   // config.view = {
   //   mapping: { '.html': 'ejs' }, // 左边写成.html后缀，会自动渲染.html文件
   // };
+  // 单数据库信息配置
   exports.mysql = {
-    // 单数据库信息配置
     client: {
       // host
       host: 'localhost',
@@ -53,6 +56,11 @@ module.exports = appInfo => {
   };
   config.jwt = {
     secret: 'Zenon',
+  };
+  config.cors = {
+    origin: '*', // 允许所有跨域访问
+    credentials: true, // 允许 Cookie 跨域跨域
+    allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH',
   };
   return {
     ...config,
