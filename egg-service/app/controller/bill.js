@@ -6,8 +6,8 @@ const Controller = require('egg').Controller;
 class BillController extends Controller {
   async add () {
     const { ctx, app } = this;
-    const { amount, type_id, type_name, date, pay_type, remark = '' } = ctx.request.body;
-    if (!amount || !type_id || !type_name || !date || !pay_type) {
+    const { amount, type_id, date, pay_type, remark = '' } = ctx.request.body;
+    if (!amount || !type_id || !date || !pay_type) {
       ctx.body = {
         code: 400,
         msg: '参数错误',
@@ -25,7 +25,7 @@ class BillController extends Controller {
       const result = await ctx.service.bill.add({
         amount,
         type_id,
-        type_name,
+        // type_name,
         date,
         pay_type,
         remark,
@@ -88,9 +88,7 @@ class BillController extends Controller {
       let listMap = _list.reduce((curr, item) => {
         // 把第一个账单项的时间格式化为 YYYY-MM-DD
         const date = moment(Number(item.date)).format('YYYY-MM-DD')
-
         const index = curr.findIndex(item => item.date == date)
-        console.log(index);
         // 如果能在累加的数组中找到当前项日期 date，那么在数组中的加入当前项到 bills 数组。
         if (curr?.length && index > -1) {
           curr[index].bills.push(item)
@@ -211,7 +209,7 @@ class BillController extends Controller {
         id, // 账单 id
         amount, // 金额
         type_id, // 消费类型 id
-        type_name, // 消费类型名称
+        // type_name, // 消费类型名称
         date, // 日期
         pay_type, // 消费类型
         remark, // 备注
@@ -323,6 +321,26 @@ class BillController extends Controller {
       }
     } catch {
 
+    }
+  }
+
+  async type () {
+    const { ctx, app } = this;
+    try {
+      const result = await ctx.service.bill.type();
+      ctx.body = {
+        code: 200,
+        msg: '请求成功',
+        data: {
+          list: result
+        }
+      }
+    } catch (error) {
+      ctx.body = {
+        code: 500,
+        msg: '系统错误',
+        data: null
+      }
     }
   }
 }

@@ -25,4 +25,5 @@ module.exports = app => {
   router.post('/api/bill/update', _jwt, controller.bill.update);// 账单更新
   router.post('/api/bill/delete', _jwt, controller.bill.delete); // 删除账单
   router.get('/api/bill/data', _jwt, controller.bill.data); // 获取数据
+  router.get('/api/bill/type', _jwt, controller.bill.type); // 获取数据
 };
