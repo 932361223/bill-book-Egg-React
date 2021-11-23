@@ -18,6 +18,7 @@ module.exports = app => {
   router.get('/api/user/test', _jwt, controller.user.test); // 放入第二个参数，作为中间件过滤项
   router.get('/api/user/get_userinfo', _jwt, controller.user.getUserInfo);
   router.post('/api/user/edit_userinfo', _jwt, controller.user.editUserInfo);
+  router.post('/api/user/modify_pass', _jwt, controller.user.modifyPass);
   router.post('/api/upload', controller.upload.upload);
   router.post('/api/bill/add', _jwt, controller.bill.add);
   router.get('/api/bill/list', controller.bill.list);

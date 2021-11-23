@@ -1,12 +1,13 @@
 import react, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { TabBar } from 'zarm';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import s from './style.module.less';
 import CustomIcon from '../CustomIcon';
 const NavBar = ({ showNav }) => {
-  const [activeKey, setActiveKey] = useState('/')
   const history = useHistory()
+  const location = useLocation()
+  const [activeKey, setActiveKey] = useState(location.pathname)
   const changeTab = (path) => {
     setActiveKey(path)
     history.push(path)

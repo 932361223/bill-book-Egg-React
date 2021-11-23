@@ -16,12 +16,16 @@ class UploadController extends Controller {
     // 声明存放资源的路径
     let uploadDir = '';
     try {
-      // ctx.request.files[0] 表示获取第一个文件，若前端上传多个文件则可以遍历这个数组对象
+      // ctx.request.files[0] 表示获取第一个文件，若上传多个文件则可以遍历这个数组对象
+
       const f = fs.readFileSync(file.filepath);
+
       const day = moment(new Date()).format('YYYYMMDD');
       // 创建图片保存的路径
       const dir = path.join(this.config.uploadDir, day);
+
       const date = Date.now(); // 毫秒数
+
       await mkdirp(dir); // 不存在就创建目录
       // 返回图片保存的路径
       uploadDir = path.join(dir, date + path.extname(file.filename)); // path.extname拓展名

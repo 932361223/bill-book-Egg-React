@@ -101,8 +101,9 @@ class UserController extends Controller {
     const token = ctx.request.header.authorization
     // 通过 app.jwt.verify 方法，解析出 token 内的用户信息
     const decode = await app.jwt.verify(token, app.config.jwt.secret);
-    const { id, username, signature, avatar } = decode
-    const userInfo = await ctx.service.user.getUserByName(username)
+    const { id } = decode
+    const userInfo = await ctx.service.user.getUserByName(decode.username)
+    const { username, signature, avatar } = userInfo
     // userInfo 中应该有密码信息
     ctx.body = {
       code: 200,
@@ -129,12 +130,13 @@ class UserController extends Controller {
       user_id = decode.id
       // 通过 username 查找 userInfo 完整信息
       const userInfo = await ctx.service.user.getUserByName(decode.username)
+
       const result = await ctx.service.user.editUserInfo({
         ...userInfo,
         signature,
         avatar
       });
-
+      console.log(result);
       ctx.body = {
         code: 200,
         msg: '请求成功',
@@ -147,6 +149,64 @@ class UserController extends Controller {
       }
     } catch (error) {
 
+    }
+  }
+  // 修改密码
+  async modifyPass () {
+    const { ctx, app } = this;
+    // 通过 token 解析，拿到 user_id
+    const { old_pass = '', new_pass = '', new_pass2 = '' } = ctx.request.body
+    try {
+      let user_id
+      const token = ctx.request.header.authorization;
+      // 解密 token 中的用户名称
+      const decode = await app.jwt.verify(token, app.config.jwt.secret);
+      if (!decode) return
+      if (decode.username == 'admin') {
+        ctx.body = {
+          code: 400,
+          msg: '管理员账户，不允许修改密码！',
+          data: null
+        }
+        return
+      }
+      user_id = decode.id
+      const userInfo = await ctx.service.user.getUserByName(decode.username)
+
+      if (old_pass != userInfo.password) {
+        ctx.body = {
+          code: 400,
+          msg: '原密码错误',
+          data: null
+        }
+        return
+      }
+
+      if (new_pass != new_pass2) {
+        ctx.body = {
+          code: 400,
+          msg: '新密码不一致',
+          data: null
+        }
+        return
+      }
+
+      const result = await ctx.service.user.modifyPass({
+        ...userInfo, //不用加也行
+        password: new_pass,
+      })
+
+      ctx.body = {
+        code: 200,
+        msg: '请求成功',
+        data: null
+      }
+    } catch (error) {
+      ctx.body = {
+        code: 500,
+        msg: '系统错误',
+        data: null
+      }
     }
   }
 }

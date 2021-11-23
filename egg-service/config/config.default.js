@@ -23,7 +23,7 @@ module.exports = appInfo => {
   // add your user config here
   const userConfig = {
     // myAppName: 'egg',
-    uploadDir: 'http://r2kf0e7q5.hn-bkt.clouddn.com', // 图片上传路径
+    uploadDir: 'app/public/upload', // 图片上传路径
   };
   config.security = {
     csrf: {
@@ -31,6 +31,11 @@ module.exports = appInfo => {
       ignoreJSON: true,
     },
     domainWhiteList: ['*'], // 配置白名单
+  };
+  config.cors = {
+    origin: '*', // 允许所有跨域访问
+    credentials: true, // 允许 Cookie 跨域跨域
+    allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH',
   };
   // config.view = {
   //   mapping: { '.html': 'ejs' }, // 左边写成.html后缀，会自动渲染.html文件
@@ -57,11 +62,7 @@ module.exports = appInfo => {
   config.jwt = {
     secret: 'Zenon',
   };
-  config.cors = {
-    origin: '*', // 允许所有跨域访问
-    credentials: true, // 允许 Cookie 跨域跨域
-    allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH',
-  };
+
   return {
     ...config,
     ...userConfig,

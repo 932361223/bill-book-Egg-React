@@ -4,6 +4,7 @@ import dayjs from 'dayjs'
 import s from './style.module.less'
 import BillItem from '@/components/BillItem'
 import CustomIcon from '@/components/CustomIcon'
+import PopupAddBill from '@/components/PopupAddBill'
 
 import PopupType from '@/components/PopupType'
 import PopupDate from '@/components/PopupDate'
@@ -14,6 +15,7 @@ const Home = () => {
   const [totalIncome, setTotalIncome] = useState(0); // 总收入
   const typeRef = useRef(); // 账单类型 ref
   const monthRef = useRef(); // 月份筛选 ref
+  const addRef = useRef(); // 添加账单 ref
   const [currentSelect, setCurrentSelect] = useState({}); // 当前筛选类型
   const [currentTime, setCurrentTime] = useState(dayjs().format('YYYY-MM')); // 当前筛选时间
   const [page, setPage] = useState(1); // 分页
@@ -28,7 +30,7 @@ const Home = () => {
 
   // 获取账单方法
   const getBillList = async () => {
-    const { data } = await get(`/bill/list?page=${page}&page_size=5&date=${currentTime}&type_id=${currentSelect.id || 'all'}`);
+    const { data } = await get(`/api/bill/list?page=${page}&page_size=5&date=${currentTime}&type_id=${currentSelect.id || 'all'}`);
     page == 1 ? setList(data.list) : setList(list.concat(data.list))
 
     setTotalExpense(data.totalExpense.toFixed(2));// 总支出
@@ -59,7 +61,9 @@ const Home = () => {
     setPage(1);
     setCurrentTime(item)
   }
-
+  const addToggle = () => {
+    addRef.current && addRef.current.show()
+  }
   // 请求列表数据
   const refreshData = () => {
     setRefreshing(REFRESH_STATE.loading);
@@ -72,9 +76,7 @@ const Home = () => {
       setPage(page + 1);
     }
   }
-  const addToggle = () => {
-    // do something
-  }
+
   return <div className={s.home}>
     <div className={s.header}>
       <div className={s.dataWrap}>
@@ -117,6 +119,7 @@ const Home = () => {
     <PopupType ref={typeRef} onSelect={select} />
     <PopupDate ref={monthRef} mode="month" onSelect={selectMonth} />
     <div className={s.add} onClick={addToggle}><CustomIcon type='tianjia' /></div>
+    <PopupAddBill ref={addRef} onReload={refreshData} />
   </div>
 }
 

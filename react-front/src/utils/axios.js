@@ -4,7 +4,7 @@ import { Toast } from 'zarm'
 const MODE = import.meta.env.MODE // 环境变量
 
 axios.defaults.baseURL = MODE == 'development' ? '/api' : 'http://api.chennick.wang'
-axios.defaults.withCredentials = true // 表示跨域请求时是否需要使用凭证
+axios.defaults.withCredentials = false // 表示跨域请求时是否需要使用凭证
 
 axios.defaults.headers['X-Requested-With'] = 'XMLHttpRequest'
 axios.defaults.headers['Authorization'] = `${localStorage.getItem('token') || null}`

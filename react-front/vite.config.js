@@ -29,7 +29,8 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),
-      'utils': path.resolve(__dirname, 'src/utils')
+      'utils': path.resolve(__dirname, 'src/utils'),
+      'config': path.resolve(__dirname, 'src/config') // src 路径
     }
   },
   server: {
@@ -37,7 +38,7 @@ export default defineConfig({
       '/api': {
         // 当遇到 /api 路径时，将其转换成 target 的值
         // target: 'http://api.chennick.wang/api/',
-        target: 'http://127.0.0.1:7001/api/',
+        target: 'http://127.0.0.1:7001/',
         changeOrigin: true,
         rewrite: path => path.replace(/^\/api/, '') // 将 /api 重写为空
       }

@@ -35,12 +35,13 @@ const Login = () => {
     }
     try {
       if (type === 'login') {
-        const { data } = await post('/user/login', {
+        const { data } = await post('/api/user/login', {
           username,
           password
         });
         localStorage.setItem('token', data.token);
         Toast.show('登陆成功')
+        window.location.href = '/'
       } else {
         if (!verify) {
           Toast.show('请输入验证码')
@@ -50,7 +51,7 @@ const Login = () => {
           Toast.show('验证码错误')
           return
         };
-        const { data, msg } = await post('/user/register', {
+        const { data, msg } = await post('/api/user/register', {
           username,
           password
         });

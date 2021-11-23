@@ -15,7 +15,7 @@ const PopupType = forwardRef(({ onSelect }, ref) => {
 
   useEffect(async () => {
     // 请求标签接口放在弹窗内，这个弹窗可能会被复用，所以请求如果放在外面，会造成代码冗余。
-    const { data: { list } } = await get('/bill/type')
+    const { data: { list } } = await get('/api/bill/type')
     setExpense(list.filter(i => i.type == 1))
     setIncome(list.filter(i => i.type == 2))
   }, [])
